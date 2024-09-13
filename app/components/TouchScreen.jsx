@@ -10,14 +10,6 @@ export default function TouchScreen({setLocalClicks}) {
 
   return (
     <div className="p-4 text-white">
-      <div
-        className="w-full h-96 bg-gray-200 border-2 border-gray-300 flex justify-center items-center mb-4"
-        onTouchStart={handleTouchStart}
-      >
-        <p className="text-center">Нажмите на эту область</p>
-      </div>
-
-      <div>
         <h3 className="text-xl font-bold mb-2">Информация о касаниях:</h3>
         <p className="mb-2">
           <strong>Количество касаний:</strong> {touchInfo.touches}
@@ -25,6 +17,15 @@ export default function TouchScreen({setLocalClicks}) {
         <p className="mb-4">
           <strong>Общее количество нажатий:</strong> {touchInfo.touchCount}
         </p>
+      <div
+        className="w-full h-96 bg-gray-200 border-2 border-gray-300 flex justify-center items-center mb-4"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <p className="text-center">Нажмите на эту область</p>
+      </div>
+
+      <div>
         {touchInfo.touchPoints.length > 0 && (
           <div>
             <h4 className="text-lg font-semibold mb-2">Координаты касаний:</h4>

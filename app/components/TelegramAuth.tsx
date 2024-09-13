@@ -163,16 +163,17 @@ export default function TelegramAuth() {
                     )}
 
 
-                    <TouchScreen setLocalClicks={setLocalClicks} />
                     <div
                         onClick={(e) => {
                             e.preventDefault()
                             click()
                         }}
-                        className="bg-blue-500  active:bg-blue-800 hover:bg-blue-700 text-white font-bold py-10 px-20 rounded select-none"
+                        className="bg-yellow-500  active:bg-yellow-800 hover:bg-yellow-700 text-white font-bold py-10 px-20 rounded select-none"
                     >
                         Click
                     </div>
+                    <TouchScreen setLocalClicks={setLocalClicks} />
+
                 </>
             ) : (
                 <div>

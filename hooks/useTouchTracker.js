@@ -1,27 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function useTouchTracking(setter) {
-    
   const [touchInfo, setTouchInfo] = useState({
     touches: 0,
     touchPoints: [],
     touchCount: 0,
     activeTouches: new Set(),
   });
-
-  useEffect(() => {
-    if(touchInfo.touches < 1)  return
-    setter(prevClicks => prevClicks + touchInfo.touches)
-    setTouchInfo(
-        {
-            touches: 0,
-            touchPoints: [],
-            touchCount: 0,
-            activeTouches: new Set(),
-          }
-    )
-  }, [touchInfo])
-
 
   const handleTouchStart = (e) => {
     const newActiveTouches = new Set(touchInfo.activeTouches);
@@ -39,8 +24,7 @@ function useTouchTracking(setter) {
       })),
       touchCount:
         prevInfo.touchCount +
-        newActiveTouches.size -
-        prevInfo.activeTouches.size,
+        newActiveTouches.size - prevInfo.activeTouches.size,
       activeTouches: newActiveTouches,
     }));
   };
@@ -66,11 +50,16 @@ function useTouchTracking(setter) {
     });
 
     setTouchInfo((prevInfo) => ({
-      touches: e.touches.length,
+      touches: 0,
       touchPoints: [],
       touchCount: prevInfo.touchCount,
       activeTouches: remainingTouches,
     }));
+
+    // Now call the setter only when the touch ends
+    if (touchInfo.touches > 0) {
+      setter((prevClicks) => prevClicks + touchInfo.touches);
+    }
   };
 
   return { touchInfo, handleTouchStart, handleTouchMove, handleTouchEnd };
