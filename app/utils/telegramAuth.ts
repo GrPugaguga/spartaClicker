@@ -36,7 +36,6 @@ export function validateTelegramWebAppData(telegramInitData:string):ValidationRe
             message: 'Hash is missing from initData', validatedData: null, user: {}
         }
     }
-    console.log(hash)
     initData.delete('hash')
 
     const authDate = initData.get('auth_date')
@@ -73,6 +72,7 @@ export function validateTelegramWebAppData(telegramInitData:string):ValidationRe
         if (userString) {
             try{
                 user = JSON.parse(userString)
+                console.log(user)
             } catch ( error){
                 console.log("Error parsing user data: ", error)
                 message = 'Error parsing user data'

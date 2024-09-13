@@ -2,17 +2,10 @@ import { getSession } from "@/app/utils/session";
 import TelegramAuth from "@/app/components/TelegramAuth";
 
 
-interface UserDara {
-  id: number;
-  first_name: string;
-  last_name?:string;
-  username: string;
-  language_code:string;
-  is_premium?: boolean;
-}
 
 export default async function Home() {
   const session = getSession()
+  
 
   return(
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
