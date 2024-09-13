@@ -12,7 +12,7 @@ export async function POST(request: Request) {
         if (userData) {
             // Возвращаем данные пользователя, если они найдены
             return NextResponse.json({
-                message: 'click added',
+                message: 'clicks added',
                 clicks: userData.clicks
             });
         } else {

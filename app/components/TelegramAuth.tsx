@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import debounce from 'lodash.debounce'; // или можешь использовать свою реализацию
+import TouchScreen from './TouchScreen.jsx'
 
 export default function TelegramAuth() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,6 +38,12 @@ export default function TelegramAuth() {
         
     }, []);
 
+    useEffect(() => {
+
+        if(localClicks == 0) return
+        updateClicksOnServer(localClicks);
+
+    },[localClicks])
 
 
 
@@ -113,7 +120,7 @@ export default function TelegramAuth() {
     const updateClicksOnServer = useCallback(
         debounce(async (totalClicks:any) => {
             try {
-                await fetch('/api/click', {
+                 fetch('/api/click', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -124,12 +131,11 @@ export default function TelegramAuth() {
                         clicks: totalClicks,
                     }),
                 });
+                setUserData((prev:any) => ({
+                    ...prev,
+                    clicks: prev.clicks + totalClicks,
+                }));
                 setLocalClicks(0); // сбрасываем локальный счётчик
-                setUserData({
-                    uid: userData.uid,
-                    username: userData.username,
-                    clicks: userData.clicks + totalClicks,
-                })
             } catch (error) {
                 console.error('Error during click update:', error);
             }
@@ -141,27 +147,24 @@ export default function TelegramAuth() {
     const click = () => {
         if (!userData) return;
 
-        const newLocalClicks = localClicks + 1;
-        setLocalClicks(newLocalClicks);
-
-        // Обновляем клики на сервере только после каждых 10 кликов
-        if (newLocalClicks  != 0) {
-            updateClicksOnServer(newLocalClicks);
-        }
-    };
+        setLocalClicks(prevClicks => prevClicks + 1);
+    }
 
     return (
         <div className="flex flex-col items-center space-y-4 p-8">
             {isAuthenticated ? (
                 <>
                     {userData ? (
-                        <div>
+                        <div className='text-yellow-500'>
                             {userData.username}: {userData.clicks + localClicks}
                         </div>
                     ) : (
                         <div>User not found</div>
                     )}
-                    <button
+
+
+                    <TouchScreen setLocalClicks={setLocalClicks} />
+                    <div
                         onClick={(e) => {
                             e.preventDefault()
                             click()
@@ -169,7 +172,7 @@ export default function TelegramAuth() {
                         className="bg-blue-500  active:bg-blue-800 hover:bg-blue-700 text-white font-bold py-10 px-20 rounded select-none"
                     >
                         Click
-                    </button>
+                    </div>
                 </>
             ) : (
                 <div>

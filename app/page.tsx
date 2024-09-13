@@ -8,7 +8,7 @@ export default async function Home() {
   
 
   return(
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-black">
       <h1 className="text-4xl font-bold mb-8">JWT Authentication for telegram mini app</h1>
       <pre>{JSON.stringify(session,null,2)}</pre>
       <TelegramAuth/>
