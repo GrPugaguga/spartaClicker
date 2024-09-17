@@ -1,16 +1,13 @@
-import { getSession } from "@/app/utils/session";
-import TelegramAuth from "@/app/components/TelegramAuth";
+'use client';
 
+import TelegramAuth from "@/app/components/TelegramAuth.jsx";
 
-
-export default async function Home() {
-  const session = getSession()
+export default function Home() {
   
 
   return(
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-black">
-      <h1 className="text-4xl font-bold mb-8">JWT Authentication for telegram mini app</h1>
-      <pre>{JSON.stringify(session,null,2)}</pre>
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-black m-0 p-0">
+      <>home</>
       <TelegramAuth/>
     </main>
   )

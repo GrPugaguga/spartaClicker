@@ -12,5 +12,8 @@
   html,
   body {
     touch-action: pan-x pan-y; /* Отключает масштабирование при использовании жестов */
-    overflow: auto; /* Отключает возможность прокрутки */
+    height: 100%; /* Ensure the html and body take up full height */
+    margin: 0; /* Remove default margins */
+    padding: 0; /* Remove default padding */
+    overflow: hidden; /* Prevent scrolling */
   }

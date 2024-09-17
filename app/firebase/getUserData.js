@@ -23,7 +23,11 @@ export default async function getUserData(user) {
         return {
           username: username,
           uid: uid,
-          clicks: 0
+          clicks: 0,
+          lvlBosses:1,
+          damage:1,
+          weapon: 'none',
+          backPack: []
         }; // Пользователь не найден
       }
       

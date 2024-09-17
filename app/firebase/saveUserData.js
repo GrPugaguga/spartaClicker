@@ -9,9 +9,13 @@ export  async function saveUserData(uid, username) {
         console.log("User already registered ");
       } else {
           await setDoc(userRef, {
-          username: username,
-          uid: uid,
-          clicks: 0
+            username: username,
+            uid: uid,
+            clicks: 0,
+            lvlBosses:1,
+            damage:1,
+            weapon: 'none',
+            backPack: []
         }
       );
         console.log("Пользователь создан.");

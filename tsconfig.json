@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/firebase/saveUserData.js", "app/firebase/getUserData.js", "app/api/user"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/firebase/saveUserData.js", "app/firebase/getUserData.js", "app/api/user", "app/components/TouchScreen.jsx", "app/components/TelegramAuth.jsx", "app/user/components", "app/firebase/setNewItem.js"],
   "exclude": ["node_modules"]
 }

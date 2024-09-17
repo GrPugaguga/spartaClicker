@@ -2,23 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
-import debounce from 'lodash.debounce'; // или можешь использовать свою реализацию
-import TouchScreen from './TouchScreen.jsx'
+import debounce from 'lodash.debounce';
+import TouchScreen from './TouchScreen.jsx';
 
 export default function TelegramAuth() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userData, setUserData] = useState<any>(null);
-    const [localClicks, setLocalClicks] = useState<number>(0); // Локальное состояние для кликов
+    const [userData, setUserData] = useState({});
+    const [localClicks, setLocalClicks] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
         checkAuth();
         getUserData();
 
-
         const handleBeforeUnload = () => {
             if (localClicks > 0 && userData) {
-                // Отправляем клики на сервер перед закрытием вкладки
                 navigator.sendBeacon('/api/click', JSON.stringify({
                     uid: userData.uid,
                     username: userData.username,
@@ -26,29 +24,19 @@ export default function TelegramAuth() {
                 }));
             }
         };
-    
-        // Добавляем обработчик события перед закрытием
+
         window.addEventListener('beforeunload', handleBeforeUnload);
-    
-        // Очищаем обработчик при размонтировании компонента
+
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-
-        
     }, []);
 
     useEffect(() => {
-
-        if(localClicks == 0) return
+        if (localClicks === 0) return;
         updateClicksOnServer(localClicks);
+    }, [localClicks]);
 
-    },[localClicks])
-
-
-
-
-    // Проверка сессии пользователя
     const checkAuth = useCallback(async () => {
         const response = await fetch('api/session');
         if (response.ok) {
@@ -56,7 +44,6 @@ export default function TelegramAuth() {
         }
     }, []);
 
-    // Получение данных пользователя
     const getUserData = useCallback(async () => {
         const WebApp = (await import('@twa-dev/sdk')).default;
         WebApp.ready();
@@ -77,6 +64,7 @@ export default function TelegramAuth() {
                 const data = await res.json();
                 if (data.user) {
                     setUserData(data.user);
+                    console.log(userData)
                 } else {
                     console.log('Пользователь не найден');
                 }
@@ -86,7 +74,6 @@ export default function TelegramAuth() {
         }
     }, []);
 
-    // Аутентификация пользователя
     const authenticateUser = useCallback(async () => {
         const WebApp = (await import('@twa-dev/sdk')).default;
         WebApp.ready();
@@ -116,11 +103,10 @@ export default function TelegramAuth() {
         }
     }, [router]);
 
-    // Оптимизированный click handler с троттлингом (ограничивает частоту обновлений)
     const updateClicksOnServer = useCallback(
-        debounce(async (totalClicks:any) => {
+        debounce(async (totalClicks) => {
             try {
-                 fetch('/api/click', {
+                fetch('/api/click', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -131,49 +117,40 @@ export default function TelegramAuth() {
                         clicks: totalClicks,
                     }),
                 });
-                setUserData((prev:any) => ({
+                setUserData((prev) => ({
                     ...prev,
                     clicks: prev.clicks + totalClicks,
                 }));
-                setLocalClicks(0); // сбрасываем локальный счётчик
+                setLocalClicks(0);
             } catch (error) {
                 console.error('Error during click update:', error);
             }
-        }, 1000), // задержка 1 секунда для предотвращения частых запросов
+        }, 1000),
         [userData]
     );
 
-    // Обработка кликов с обновлением локального состояния
-    const click = () => {
-        if (!userData) return;
-
-        setLocalClicks(prevClicks => prevClicks + 1);
-    }
 
     return (
-        <div className="flex flex-col items-center space-y-4 p-8">
+        <div className="flex flex-col justify-between items-center space-y-4 p-8 h-screen">
             {isAuthenticated ? (
                 <>
                     {userData ? (
-                        <div className='text-yellow-500'>
-                            {userData.username}: {userData.clicks + localClicks}
+                        <>
+                        <div className="absolute top-4 left-4 text-yellow-500">
+                            {userData.username}
                         </div>
+                        <div className="absolute top-12 left-4 text-yellow-500">
+                            GOLD: {userData.clicks + localClicks}
+                        </div>
+                        <div className="absolute top-24 left-4 text-yellow-500">
+                            LVL: {userData.lvlBosses}
+                        </div>
+                        </>
                     ) : (
                         <div>User not found</div>
                     )}
 
-
-                    <div
-                        onClick={(e) => {
-                            e.preventDefault()
-                            click()
-                        }}
-                        className="bg-yellow-500  active:bg-yellow-800 hover:bg-yellow-700 text-white font-bold py-10 px-20 rounded select-none"
-                    >
-                        Click
-                    </div>
-                    <TouchScreen setLocalClicks={setLocalClicks} />
-
+                    <TouchScreen setLocalClicks={setLocalClicks} userData={userData} setUserData={setUserData}/>
                 </>
             ) : (
                 <div>
