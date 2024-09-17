@@ -10,7 +10,7 @@ interface ItemDataProps {
 export default function ItemData({ item, setItem }: ItemDataProps) {
   return (
     <div className="flex flex-col items-center p-4 bg-gray-700 border border-gray-600 rounded-md" onDoubleClick={() => setItem(null)}>
-      <div className="cell bg-gray-600 border border-gray-500 rounded-lg h-24 w-24 flex justify-center items-center">
+      <div className="cell bg-gray-600 border border-gray-500 rounded-lg h-24 w-24 flex justify-center items-center border-2 border-solid border-yellow-500">
         {item ? (
           <img src={`/images/weapon/${item.name}.jpg`} alt="" className="object-contain w-full h-full" />
         ) : null}

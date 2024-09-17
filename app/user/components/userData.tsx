@@ -28,7 +28,9 @@ export default function UserData({ userData, activeWeapon, setActiveWeapon }: Us
         onDoubleClick={() => setActiveWeapon('none')}
       >
         {activeWeapon ? (
+          <div className="cell bg-gray-600 border border-gray-500 rounded-lg h-24 w-24 flex justify-center items-center border-2 border-solid border-yellow-500 overflow-hidden">
           <img src={`/images/weapon/${activeWeapon}.jpg`} alt="" className="object-contain w-full h-full" />
+          </div>
         ) : (
           'None'
         )}

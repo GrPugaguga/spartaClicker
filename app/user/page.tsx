@@ -5,11 +5,13 @@ import UserData from './components/userData';
 import BackPack from './components/backPack';
 import getItemDamage from './components/getItemDamage';
 import { UserData as UserDataType } from './../types'; // Import the UserData type
+import { useUser } from '../context/UserContext';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function User() {
   // Define the type of userData using the UserData interface
-  const [userData, setUserData] = useState<UserDataType | null>(null);
-  const [activeWeapon, setActiveWeapon] = useState<string>('');
+  const { userData, setUserData, isLoading } = useUser();
+  const [activeWeapon, setActiveWeapon] = useState<string>(userData? userData?.weapon : '');
 
   useEffect(() => {
     getUserData();
@@ -79,10 +81,12 @@ export default function User() {
     }
   }, []);
 
+  if (isLoading) return <LoadingSpinner />;
+
   return (
     <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-black to-gray-900 text-white py-12">
-      <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-md">
-        {userData && (
+      <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-md border-solid border-yellow-500">
+      {userData && (
           <UserData userData={userData} activeWeapon={activeWeapon} setActiveWeapon={setActiveWeapon} />
         )}
       </div>

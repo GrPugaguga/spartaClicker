@@ -8,17 +8,15 @@ interface TouchScreenProps {
   setLocalClicks: (clicks: any) => void;
   userData: UserData | null;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
+  bossHp: { hp: number; regen: number } ,
+  setBossHp: any
 }
 
-export default function TouchScreen({ setLocalClicks, userData, setUserData }: TouchScreenProps) {
+export default function TouchScreen({ setLocalClicks, userData, setUserData,bossHp ,setBossHp }: TouchScreenProps) {
   const { touchInfo, handleTouchStart, handleTouchEnd } = useTouchTracking(setLocalClicks);
   const circleRef = useRef<HTMLDivElement | null>(null);
   const [circleRect, setCircleRect] = useState<DOMRect | null>(null);
-  const [hp, setHp] = useState<number>(0); // Initial HP as number
-  const [bossHp, setBossHp] = useState<{ hp: number; regen: number }>({
-    hp: 0,
-    regen: 0,
-  });
+  const [hp, setHp] = useState<number>(bossHp.hp); // Initial HP as number
   const [defeated, setDefeated] = useState<boolean>(false); // Defeated state
   const [lastDamage, setLastDamage] = useState<number>(0); // Last damage state
 
@@ -189,7 +187,7 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }: T
               key={touch.identifier}
               className="absolute flex items-center justify-center z-50"
               style={{
-                top: `${touch.clientY - circleRect.top/2 + 64}px`,
+                top: `${touch.clientY - circleRect.top}px`,
                 left: `${touch.clientX - circleRect.left}px`,
               }}
             >

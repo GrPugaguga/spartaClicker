@@ -1,11 +1,15 @@
 import getBossData from "@/app/firebase/getBossData"
 import { NextResponse } from "next/server"
 
+interface BossData {
+    hp: number;
+    regen: number;
+  }
 
 export async function POST(request: Request) {
     const {lvl} = await request.json()
 
-        const BossData:any = await getBossData({lvl})
+        const BossData:BossData = await getBossData({lvl})
         console.log(BossData)
         if (BossData) {
             // Возвращаем данные пользователя, если они найдены

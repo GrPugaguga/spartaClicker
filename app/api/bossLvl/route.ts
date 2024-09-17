@@ -1,4 +1,3 @@
-import getUserData from "@/app/firebase/getUserData"
 import { setUserBoss } from "@/app/firebase/setUserBoss"
 import { NextResponse } from "next/server"
 

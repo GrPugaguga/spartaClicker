@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Script from "next/script";
 import LayoutComponent from "./LayoutComponent"; // Import the layout component
+import { UserProvider } from "./context/UserContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,9 +31,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
+        <Script
+          strategy="lazyOnload"
+          id="expand-script"
+        >{`Telegram.WebApp.expand()`}</Script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <LayoutComponent>{children}</LayoutComponent>
+        <LayoutComponent><UserProvider>{children}</UserProvider></LayoutComponent>
       </body>
     </html>
   );

@@ -16,7 +16,7 @@ export default function BackPack({ userData, setActiveWeapon }: BackPackProps) {
             <div
               onDoubleClick={() => setActiveWeapon(item)}
               key={index}
-              className="cell bg-gray-600 border border-gray-500 rounded-lg h-24 w-24 flex justify-center items-center"
+              className="cell bg-gray-600 border border-gray-500 rounded-lg h-24 w-24 flex justify-center items-center border-1 border-solid border-yellow-500 overflow-hidden"
             >
               <img src={`/images/weapon/${item}.jpg`} alt="" className="object-contain w-full h-full" />
             </div>

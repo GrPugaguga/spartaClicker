@@ -25,11 +25,11 @@ export async function POST(request: Request) {
                 message: 'User not found'
             }, { status: 404 });
         }
-    } catch (error:any) {
+    } catch (error) {
         console.error("Ошибка при обработке запроса: ", error);
         return NextResponse.json({
             message: 'Ошибка сервера',
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 });
     }
 }

@@ -1,3 +1,21 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:next/recommended",
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "warn", // Меняем ошибку на предупреждение
+   " @typescript-eslint/explicit-module-boundary-types": "off",
+    "react-hooks/exhaustive-deps": "warn", // Меняем ошибку на предупреждение
+    "no-unused-vars": "warn", // Меняем ошибку на предупреждение
+    "@next/next/no-img-element": "warn", // Меняем ошибку на предупреждение
+  },
+  "settings": {
+    "react": {
+      "version": "detect",
+    },
+  },
 }

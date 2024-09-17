@@ -5,17 +5,17 @@ import Market from './components/market';
 import ItemData from './components/itemData';
 import BuyButton from './components/buyButton'; // Import the new BuyButton
 import { UserData, ItemData as ItemType } from './../types';
+import { useUser } from '../context/UserContext';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 
 export default function Treasure() {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const { userData, setUserData, isLoading, market } = useUser();
   const [item, setItem] = useState<ItemType | null>(null);
-  const [market, setMarket] = useState<any>(null);
   const [buySuccess, setBuySuccess] = useState(false); // Add state for success message
 
   useEffect(() => {
     getUserData();
-    getMarket();
   }, []);
 
 
@@ -48,28 +48,6 @@ export default function Treasure() {
     }
   }, []);
 
-  const getMarket = useCallback(async () => {
-    const WebApp = (await import('@twa-dev/sdk')).default;
-    WebApp.ready();
-    const initData = WebApp.initData;
-
-    if (initData) {
-      try {
-        const res = await fetch('/api/market');
-
-        if (!res.ok) throw new Error(`Ошибка: ${res.status}`);
-
-        const data = await res.json();
-        if (data.market) {
-          setMarket(data.market);
-        } else {
-          console.log('Рынок не найден');
-        }
-      } catch (error) {
-        console.error('Error during fetching market:', error);
-      }
-    }
-  }, []);
 
   const buyItem = async () => {
     if (!item || !userData) {
@@ -120,18 +98,20 @@ export default function Treasure() {
     }
   };
 
+  if (isLoading) return <LoadingSpinner />;
+
   return (
-    <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-black to-gray-900 text-white py-12">
+    <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-black to-gray-900 text-white py-12 ">
       <span className="absolute top-4 left-4 text-lg">
         Gold: <span className="text-yellow-400">{userData?.clicks || 0}</span>
       </span>
       <span className="absolute top-4 ml-4 text-lg">
         Lvl: <span className="text-yellow-400">{userData?.lvlBosses || 0}</span>
       </span>
-      <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-md">
+      <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-mdborder-2 border-solid border-yellow-500">
         <ItemData item={item} setItem={setItem} />
       </div>
-      <hr className="my-8 border-gray-600 border-t-2" />
+      <hr className="my-8 border-gray-600 border-t-2 " />
       <BuyButton item={item} userData={userData} handleBuy={handleBuy} />
       <div className="mt-8 w-full max-w-md">
         <Market market={market} setItem={setItem} />
