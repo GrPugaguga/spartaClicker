@@ -3,55 +3,51 @@
 import { useEffect, useState, useCallback } from 'react';
 import UserData from './components/userData';
 import BackPack from './components/backPack';
-import getItemDamage from './components/getItemDamage'
+import getItemDamage from './components/getItemDamage';
+import { UserData as UserDataType } from './../types'; // Import the UserData type
 
 export default function User() {
-  const [userData, setUserData] = useState({});
-  const [activeWeapon, setActiveWeapon] = useState('')
+  // Define the type of userData using the UserData interface
+  const [userData, setUserData] = useState<UserDataType | null>(null);
+  const [activeWeapon, setActiveWeapon] = useState<string>('');
 
-  useEffect(() => {  
- getUserData();
+  useEffect(() => {
+    getUserData();
   }, []);
-
-  // useEffect(() => {
-  //   if(activeWeapon == userData.weapon) return
-  //   setActiveWeapon(userData.weapon)
-  // },[userData])
 
   useEffect(() => {
     const fetchUserWeapon = async () => {
-        try {
-          const response = await fetch('/api/changeWeapon', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              uid: userData.uid,
-              username: userData.username,
-              weapon: activeWeapon
-            }),
-          });
-  
-          if (!response.ok) throw new Error(`Error: ${response.status}`);
+      try {
+        const response = await fetch('/api/changeWeapon', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uid: userData?.uid, // Optional chaining to avoid null/undefined issues
+            weapon: activeWeapon,
+          }),
+        });
 
-
-
-          } catch (error) {
-          console.error("Failed to fetch boss data:", error);
-        }
-      };
-      setUserData((prev) => ({
-        ...prev,
-        weapon: activeWeapon,
-        damage: getItemDamage(activeWeapon)
-      }))
-      if(userData){
-        fetchUserWeapon()
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
+      } catch (error) {
+        console.error('Failed to fetch boss data:', error);
       }
+    };
 
-  },[activeWeapon])
-
+    if (userData) {
+      setUserData((prev: any) =>
+        prev
+          ? {
+              ...prev,
+              weapon: activeWeapon,
+              damage: getItemDamage(activeWeapon) ,
+            }
+          : prev
+      );
+      fetchUserWeapon();
+    }
+  }, [activeWeapon]);
 
   const getUserData = useCallback(async () => {
     const WebApp = (await import('@twa-dev/sdk')).default;
@@ -73,7 +69,7 @@ export default function User() {
         const data = await res.json();
         if (data.user) {
           setUserData(data.user);
-          setActiveWeapon(data.user.weapon)
+          setActiveWeapon(data.user.weapon);
         } else {
           console.log('Пользователь не найден');
         }
@@ -84,13 +80,15 @@ export default function User() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center  min-h-screen bg-gradient-to-b from-black to-gray-900 text-white py-12 ">
+    <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-black to-gray-900 text-white py-12">
       <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-md">
-        <UserData userData={userData} activeWeapon={activeWeapon} setActiveWeapon={setActiveWeapon}/>
+        {userData && (
+          <UserData userData={userData} activeWeapon={activeWeapon} setActiveWeapon={setActiveWeapon} />
+        )}
       </div>
       <hr className="my-8 border-gray-600 border-t-2" />
       <div className="mt-8 w-full max-w-md">
-        <BackPack userData={userData} setActiveWeapon={setActiveWeapon}/>
+        {userData && <BackPack userData={userData} setActiveWeapon={setActiveWeapon} />}
       </div>
     </main>
   );

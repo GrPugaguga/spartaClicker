@@ -17,7 +17,7 @@ export async function POST(request: Request) {
         const session = await encrypt({user,expires})
 
         cookies().set("session", session, {expires, httpOnly: true})
-        saveUserData(validationResult.user.id,validationResult.user.username)
+        saveUserData(String(validationResult.user.id),String(validationResult.user.username))
         return NextResponse.json({ message: "Authenticated successful"})
 
     }else {

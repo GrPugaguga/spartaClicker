@@ -1,19 +1,26 @@
 "use client"; // Component runs on the client side
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect,Touch } from "react";
 import useTouchTracking from "@/hooks/useTouchTracker";
+import { UserData } from "./../types"; // Import the UserData type from types
 
-export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
+interface TouchScreenProps {
+  setLocalClicks: (clicks: any) => void;
+  userData: UserData | null;
+  setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
+}
+
+export default function TouchScreen({ setLocalClicks, userData, setUserData }: TouchScreenProps) {
   const { touchInfo, handleTouchStart, handleTouchEnd } = useTouchTracking(setLocalClicks);
-  const circleRef = useRef(null);
-  const [circleRect, setCircleRect] = useState(null);
-  const [hp, setHp] = useState('0'); // Initial HP
-  const [bossHp, setBossHp] = useState({
+  const circleRef = useRef<HTMLDivElement | null>(null);
+  const [circleRect, setCircleRect] = useState<DOMRect | null>(null);
+  const [hp, setHp] = useState<number>(0); // Initial HP as number
+  const [bossHp, setBossHp] = useState<{ hp: number; regen: number }>({
     hp: 0,
-    regen:0
+    regen: 0,
   });
-  const [defeated, setDefeated] = useState(false); // Defeated state
-  const [lastDamage, setLastDamage] = useState(0); // Last damage state
+  const [defeated, setDefeated] = useState<boolean>(false); // Defeated state
+  const [lastDamage, setLastDamage] = useState<number>(0); // Last damage state
 
   useEffect(() => {
     if (circleRef.current) {
@@ -30,7 +37,7 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            lvl: userData.lvlBosses,
+            lvl: userData?.lvlBosses,
           }),
         });
 
@@ -50,10 +57,10 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
       }
     };
 
-    if (userData.lvlBosses) {
+    if (userData?.lvlBosses) {
       fetchBossData();
     }
-  }, [userData.lvlBosses]);
+  }, [userData?.lvlBosses]);
 
 
   useEffect(() => {
@@ -74,11 +81,11 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
       if (!defeated && !!bossHp.regen) {
         const regenSpan = document.getElementById('regen-span');
         if (regenSpan) {
-          regenSpan.style.opacity = 1;
+          regenSpan.style.opacity = '1';
           regenSpan.textContent = `+${bossHp.regen}`;
   
           setTimeout(() => {
-            regenSpan.style.opacity = 0; // Fade it out after 500ms
+            regenSpan.style.opacity = '0'; // Fade it out after 500ms
           }, 500);
         }
       }
@@ -102,7 +109,7 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
         .then((response) => response.json())
         .then((data) => {
           console.log("Boss defeat data sent successfully:", data);
-          setUserData((prev) => ({
+          setUserData((prev:any) => ({
             ...prev,
             lvlBosses: prev.lvlBosses + 1,
           }));
@@ -112,15 +119,15 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
           console.error("Error sending boss defeat data:", error);
         });
 
-      setLocalClicks((prevClicks) => prevClicks + Math.floor(bossHp.hp * 1.3));
-    }
+        setLocalClicks((prevClicks: number) => prevClicks + Math.floor(bossHp.hp * 1.3));
+      }
   }, [defeated]);
 
-  const handleTouchAndReduceHp = (e) => {
+  const handleTouchAndReduceHp = (e:any) => {
     handleTouchStart(e);
     if (hp > 0) {
       const criticalHit = Math.random() < 0.2; // 20% critical hit chance
-      const damage = criticalHit ? Math.floor(Number(userData.damage)*1.7) : userData.damage; // Critical hit deals 5, regular deals 2
+      const damage = criticalHit ? Math.floor(Number(userData?.damage) * 1.7) : Number(userData?.damage); // Convert userData.damage to number
 
       setHp((prevHp) => {
         const newHp = prevHp - damage;
@@ -142,7 +149,7 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
         className={`relative w-[300px] h-[300px] bg-yellow-500 ${
           defeated ? 'opacity-50' : 'active:bg-yellow-800'
         } rounded-full border-1 border-yellow-900 flex justify-center items-center mx-auto`}
-        onTouchStart={!defeated ? handleTouchAndReduceHp : null} // Disable clicks when defeated
+        onTouchStart={!defeated ? handleTouchAndReduceHp : undefined} 
         onTouchEnd={handleTouchEnd}
       >
         <img
@@ -177,12 +184,12 @@ export default function TouchScreen({ setLocalClicks, userData, setUserData }) {
 
         {circleRect &&
           touchInfo.touchPoints.length > 0 &&
-          touchInfo.touchPoints.map((touch) => (
+          touchInfo.touchPoints.map((touch: Touch) => (
             <div
               key={touch.identifier}
               className="absolute flex items-center justify-center z-50"
               style={{
-                top: `${touch.clientY - circleRect.top}px`,
+                top: `${touch.clientY - circleRect.top/2 + 64}px`,
                 left: `${touch.clientX - circleRect.left}px`,
               }}
             >

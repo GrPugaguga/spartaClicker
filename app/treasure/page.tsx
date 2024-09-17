@@ -1,15 +1,17 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import Market from './components/market.jsx';
-import ItemData from './components/itemData.jsx';
-import BuyButton from './components/buyButton.jsx'; // Import the new BuyButton
+import Market from './components/market';
+import ItemData from './components/itemData';
+import BuyButton from './components/buyButton'; // Import the new BuyButton
+import { UserData, ItemData as ItemType } from './../types';
+
 
 export default function Treasure() {
-  const [userData, setUserData] = useState({});
-  const [item, setItem] = useState(null);
-  const [market, setMarket] = useState({});
-  const [buySuccess, setBuySuccess] = useState(false); // Добавляем состояние для сообщения
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [item, setItem] = useState<ItemType | null>(null);
+  const [market, setMarket] = useState<any>(null);
+  const [buySuccess, setBuySuccess] = useState(false); // Add state for success message
 
   useEffect(() => {
     getUserData();
@@ -70,6 +72,10 @@ export default function Treasure() {
   }, []);
 
   const buyItem = async () => {
+    if (!item || !userData) {
+      console.log('Item or userData is null');
+      return;
+    }
     try {
       const response = await fetch('/api/buyItem', {
         method: 'POST',
@@ -86,9 +92,9 @@ export default function Treasure() {
       if (!response.ok) throw new Error(`Error: ${response.status}`);
 
       // Обновляем состояние userData, добавляя предмет в рюкзак
-      setUserData((prev) => ({
+      setUserData((prev:any) => ({
         ...prev,
-        clicks: prev.clicks - item.price,
+        clicks: prev.clicks - Number(item.price),
         backpack: Array.isArray(prev.backpack) ? [...prev.backpack, item.name] : [item.name]
       }));
 
@@ -102,7 +108,11 @@ export default function Treasure() {
 
   const handleBuy = () => {
     // Логика покупки предмета
-    if (item && item.price <= userData.clicks && item.lvlBosses <= userData.lvlBosses) {
+    if (!item || !userData) {
+      console.log('Item or userData is null');
+      return;
+    }
+    if (item && Number(item.price) <= userData.clicks && Number(item.lvlBosses) <= userData.lvlBosses) {
       buyItem();
       console.log('Item purchased:', item.name);
     } else {
@@ -113,16 +123,16 @@ export default function Treasure() {
   return (
     <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-black to-gray-900 text-white py-12">
       <span className="absolute top-4 left-4 text-lg">
-        Gold: <span className="text-yellow-400">{userData.clicks || 0}</span>
+        Gold: <span className="text-yellow-400">{userData?.clicks || 0}</span>
       </span>
       <span className="absolute top-4 ml-4 text-lg">
-        Lvl: <span className="text-yellow-400">{userData.lvlBosses || 0}</span>
+        Lvl: <span className="text-yellow-400">{userData?.lvlBosses || 0}</span>
       </span>
       <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-md">
         <ItemData item={item} setItem={setItem} />
       </div>
       <hr className="my-8 border-gray-600 border-t-2" />
-      <BuyButton item={item} userData={userData} handleBuy={handleBuy} setUserData={setUserData} />
+      <BuyButton item={item} userData={userData} handleBuy={handleBuy} />
       <div className="mt-8 w-full max-w-md">
         <Market market={market} setItem={setItem} />
       </div>

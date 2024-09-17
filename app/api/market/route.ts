@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import {getMarket} from './../../firebase/getMarket.js'
+import {getMarket} from './../../firebase/getMarket'
 
 export async function GET() {
     const resp = await getMarket()

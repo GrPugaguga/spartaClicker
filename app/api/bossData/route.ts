@@ -10,7 +10,7 @@ export async function POST(request: Request) {
         if (BossData) {
             // Возвращаем данные пользователя, если они найдены
             return NextResponse.json({
-                message: 'new boss',
+                message: 'New boss data found',
                 bossData: BossData,
                 lvl:lvl
             });

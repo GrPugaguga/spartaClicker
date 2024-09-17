@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     if(item){
             // Возвращаем данные пользователя, если они найдены
             return NextResponse.json({
-                message: 'item added',
+                message: 'new item succesfuly bought',
             });
 
     }else {

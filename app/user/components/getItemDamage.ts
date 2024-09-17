@@ -1,5 +1,5 @@
 
-const getItemDamage = (weapon) => {
+const getItemDamage = (weapon:string) => {
     switch(weapon){
         case 'knife':
             return 4;

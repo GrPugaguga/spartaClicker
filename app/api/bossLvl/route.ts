@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     if(boss){
             // Возвращаем данные пользователя, если они найдены
             return NextResponse.json({
-                message: 'boss added',
+                message: 'boss lvl is upgrate!',
             });
 
     }else {

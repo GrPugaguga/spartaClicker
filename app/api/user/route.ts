@@ -9,8 +9,9 @@ export async function POST(request: Request) {
 
         // Получаем данные пользователя
         const userData = await getUserData({
-           uid: validationResult.user.id, 
-           username: validationResult.user.username});
+           uid: String(validationResult.user.id), 
+           username: String(validationResult.user.username)
+        });
 
         if (userData) {
             // Возвращаем данные пользователя, если они найдены
