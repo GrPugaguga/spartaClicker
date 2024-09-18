@@ -66,22 +66,23 @@ export default function HomeClient() {
     return (
         <div className="relative w-full h-screen flex flex-col justify-between items-center p-8">
             {userData ? (
-                <>
-                    <div className="absolute top-4 left-4 bg-yellow-500 text-black px-3 py-1 rounded-full shadow-lg">
+                <div className="absolute top-4 left-4 flex flex-col space-y-2">
+                    <div className="bg-roman-wood text-roman-gold px-3 py-1 rounded-full shadow-lg">
                         <span className="font-bold">{userData.username}</span>
                     </div>
-                    <div className="absolute top-16 left-4 bg-yellow-600 text-white px-3 py-1 rounded-full shadow-lg">
+                    <div className="bg-roman-gold text-roman-black px-3 py-1 rounded-full shadow-lg">
                         <span className="font-semibold">GOLD: </span>
                         <span className="font-bold">{userData.clicks + localClicks}</span>
                     </div>
-                    <div className="absolute top-28 left-4 bg-purple-600 text-white px-3 py-1 rounded-full shadow-lg">
+                    <div className="bg-roman-red text-roman-gold px-3 py-1 rounded-full shadow-lg">
                         <span className="font-semibold">LVL: </span>
                         <span className="font-bold">{userData.lvlBosses}</span>
                     </div>
-                </>
+                </div>
             ) : (
-                <div className="text-red-500 font-bold text-xl">User not found</div>
+                <div className="text-roman-red font-bold text-xl">User not found</div>
             )}
+
 
             <div className="w-full h-full flex items-center justify-center">
                 <TouchScreen

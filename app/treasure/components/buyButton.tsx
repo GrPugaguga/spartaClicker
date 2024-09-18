@@ -15,11 +15,11 @@ export default function BuyButton({ item, userData, handleBuy }: BuyButtonProps)
   return (
     <button
       className={`
-        ${canBuy ? 'bg-yellow-700 hover:bg-yellow-600' : 'bg-gray-700 cursor-not-allowed'}
-        text-white font-bold py-2 px-4 rounded-lg
-        border-2 ${canBuy ? 'border-yellow-500' : 'border-gray-600'}
+        ${canBuy ? 'bg-roman-gold hover:bg-roman-red' : 'bg-roman-wood cursor-not-allowed'}
+        text-roman-black font-bold py-2 px-4 rounded-lg
+        border-2 ${canBuy ? 'border-roman-red' : 'border-roman-gold'}
         transition-all duration-300 transform hover:scale-105
-        shadow-lg hover:shadow-xl border-2 border-solid border-yellow-500
+        shadow-lg hover:shadow-xl
       `}
       onClick={canBuy ? handleBuy : undefined}
       disabled={!canBuy}

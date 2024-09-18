@@ -18,6 +18,8 @@ export async function saveUserData(uid: string | number, username: string) {
         damage: 1,
         weapon: 'none',
         backPack: [],
+        energy: 1000,
+        timestamp: Date.now()
       });
     }
   } catch (error) {

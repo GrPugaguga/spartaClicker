@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 
 * {
     user-select: none;
@@ -16,4 +17,9 @@
     margin: 0; /* Remove default margins */
     padding: 0; /* Remove default padding */
     overflow: hidden; /* Prevent scrolling */
+    @apply bg-roman-black text-roman-gold font-roman;
+  }
+
+  .font-roman {
+    font-family: 'Cinzel', serif;
   }

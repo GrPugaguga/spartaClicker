@@ -1,5 +1,4 @@
-
-const getItemDamage = (weapon:string) => {
+const getItemDamage = (weapon:string): number => {
     switch(weapon){
         case 'knife':
             return 4;
@@ -15,6 +14,8 @@ const getItemDamage = (weapon:string) => {
             return 9999
         case 'legendaryToothpick':
             return 21
+        default:
+            return 0; // или другое подходящее значение по умолчанию
     }
 }
 

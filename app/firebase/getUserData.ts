@@ -28,6 +28,8 @@ export default async function getUserData(user: User) {
         damage: 1,
         weapon: 'none',
         backPack: [],
+        energy: 1000,
+        timestamp: Date.now()
       };
     }
   } catch (error) {

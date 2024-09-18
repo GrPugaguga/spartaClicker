@@ -84,13 +84,13 @@ export default function User() {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <main className="flex flex-col items-center min-h-screen bg-gradient-to-b from-black to-gray-900 text-white py-12">
-      <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-md border-solid border-yellow-500">
-      {userData && (
+    <main className="flex flex-col items-center min-h-screen bg-roman-black text-roman-gold py-12">
+      <div className="flex flex-col items-center bg-roman-wood border-2 border-roman-gold rounded-lg p-6 w-full max-w-md">
+        {userData && (
           <UserData userData={userData} activeWeapon={activeWeapon} setActiveWeapon={setActiveWeapon} />
         )}
       </div>
-      <hr className="my-8 border-gray-600 border-t-2" />
+      <hr className="my-8 border-roman-gold border-t-2 w-full max-w-md" />
       <div className="mt-8 w-full max-w-md">
         {userData && <BackPack userData={userData} setActiveWeapon={setActiveWeapon} />}
       </div>

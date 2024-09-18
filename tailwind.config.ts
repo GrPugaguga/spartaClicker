@@ -9,8 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'roman-gold': '#FFD700',
+        'roman-black': '#1A1A1A',
+        'roman-wood': '#8B4513',
+        'roman-red': '#8B0000', 
+      },
+      fontFamily: {
+        'roman': ['Trajan Pro', 'serif'],
       },
     },
   },
